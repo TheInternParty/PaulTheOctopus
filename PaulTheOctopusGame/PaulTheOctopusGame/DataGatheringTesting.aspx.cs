@@ -13,5 +13,23 @@ namespace PaulTheOctopusGame
         {
 
         }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            getTeams();
+        }
+
+        public void getTeams()
+        {
+
+
+
+
+
+            return;
+        }
+
+
+
     }
 }
