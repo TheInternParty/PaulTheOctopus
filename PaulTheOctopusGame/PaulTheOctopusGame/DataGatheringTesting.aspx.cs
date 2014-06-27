@@ -39,12 +39,19 @@ namespace PaulTheOctopusGame
 
             //dynamic res = JsonValue.Parse(responseText)
 
-            JObject res = JObject.Parse(responseText);
+            //JObject res = JObject.Parse(responseText);
 
-            var some = JsonConvert.DeserializeObject<dynamic>(responseText);
-            string a = some.teams[0].title;
+            var res = JsonConvert.DeserializeObject<dynamic>(responseText);
+            foreach(var item in  res.teams.Children())
+            {
+                string a = item.title;
+                Debug.WriteLine(a);       
+            }
             
-            Debug.Write(a);
+            
+
+
+            
             
            
 
