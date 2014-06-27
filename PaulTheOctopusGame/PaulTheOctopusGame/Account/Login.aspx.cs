@@ -8,7 +8,7 @@ using System.Data.SqlClient;
 
 namespace PaulTheOctopusGame.Account
 {
-    public partial class Login : System.Web.UI.UserControl
+    public partial class Login : System.Web.UI.Page
     {
         SqlConnection sql_con;
         protected void Page_Load(object sender, EventArgs e)
@@ -17,17 +17,17 @@ namespace PaulTheOctopusGame.Account
         }
         protected void Open_Connection()
         {
-            sql_con = new SqlConnection(@"Data Source=ciqgur-atd133\sqlexpress;Initial Catalog=ptogame;Integrated Security=SSPI");
+            sql_con = new SqlConnection("Data Source=ciqgur-atd133\\sqlexpress;Initial Catalog=ptogame;Integrated Security=SSPI");
             sql_con.Open();
         }
-        public void login()
+        public void login(object sender, EventArgs e)
         {
             String username = ((TextBox) LoginUser.FindControl("userName")).Text;
             String password = ((TextBox)LoginUser.FindControl("Password")).Text;
             SqlDataReader rdr;
             Open_Connection();
-            SqlCommand cmd = new SqlCommand("select name,password from User_tbl where user_tbl");
-            rdr = cmd.ExecuteReader();
+            SqlCommand cmd = new SqlCommand("select name,password from User_tbl");
+            rdr=cmd.ExecuteReader();
             Session["username"] = username;
             Session["password"] = password;
             if(rdr.HasRows)
