@@ -61,8 +61,11 @@ namespace PaulTheOctopusGame
                 param1.Value = teamkey;
                 cmd.Parameters.Add(param);
                 cmd.Parameters.Add(param1);
-
                 cmd.ExecuteNonQuery();
+                
+
+
+
             }
 
 
@@ -110,6 +113,115 @@ namespace PaulTheOctopusGame
             var responseText = reader.ReadToEnd();
 
             Debug.WriteLine(responseText);
+            var res = JsonConvert.DeserializeObject<dynamic>(responseText);
+
+            foreach(var item in res.games.Children())
+            {
+
+                string team1 = item.team1_key;
+                string team2 = item.team2_key;
+                DateTime date = Convert.ToDateTime(item.play_at);
+
+                SqlCommand cmd = new SqlCommand("select * from Matches_tbl where matchdate=@date AND ((team1=@team1 AND team2=@team2) OR (team1=@team2 AND team2=@team1)) ;", MyGlobal.sqlConnection1);
+                SqlParameter param = new SqlParameter();
+                param.ParameterName = "@team1";
+                param.Value = team1;
+                SqlParameter param1 = new SqlParameter();
+                param1.ParameterName = "@team2";
+                param1.Value = team2;
+                SqlParameter param2 = new SqlParameter();
+                param2.ParameterName = "@date";
+                param2.Value = date;
+                cmd.Parameters.Add(param);
+                cmd.Parameters.Add(param1);
+                cmd.Parameters.Add(param2);
+
+
+                SqlDataReader rd = cmd.ExecuteReader();
+                int count = 0;
+                while (rd.Read())
+                {
+                    count = 1;
+                    break;
+
+                }
+                if (count == 1)
+                {
+                    rd.Close();
+                    continue;
+                }
+                rd.Close();
+                bool completed=true;
+                var team1score = item.score1;
+                var team2score = item.score2;
+                if (team1score == null)
+                {
+                    Debug.WriteLine("NULL");
+                    completed = false;
+
+                }
+                SqlCommand cmd3 = new SqlCommand();
+
+                SqlParameter param6 = new SqlParameter();
+                param6.ParameterName = "@team1";
+                param6.Value = team1;
+
+                SqlParameter param7 = new SqlParameter();
+                param7.ParameterName = "@team2";
+                param7.Value = team2;
+
+                SqlParameter param8 = new SqlParameter();
+                param8.ParameterName = "@date";
+                param8.Value = date;
+                
+
+                SqlParameter param4 = new SqlParameter();
+               
+
+                SqlParameter param5 = new SqlParameter();
+                
+
+
+                cmd3.Parameters.Add(param6);
+                cmd3.Parameters.Add(param7);
+                cmd3.Parameters.Add(param8);
+               
+              
+
+
+                if (completed)
+                {
+                    cmd3.CommandText="insert into Matches_tbl (team1, team2, matchdate, completed, team1score, team2score) values(@team1, @team2, @date, 1, @team1score, @team2score);";
+                    cmd3.Connection = MyGlobal.sqlConnection1;
+                    //SqlCommand cmd3 = new SqlCommand("insert into Matches_tbl (team1, team2, matchdate, completed, team1score, team2score) values(@team1, @team2, @date, @completed, @team1score, @team2score)", );
+                    param4.ParameterName = "@team1score";
+                    param4.Value = Convert.ToInt32(team1score);
+                    param5.ParameterName = "@team2score";
+                    param5.Value = Convert.ToInt32(team2score);
+                    cmd3.Parameters.Add(param4);
+                    cmd3.Parameters.Add(param5);
+                
+                }
+                else
+                {
+                    cmd3.CommandText = "insert into Matches_tbl (team1, team2, matchdate, completed) values(@team1, @team2, @date, 0);";
+                    cmd3.Connection = MyGlobal.sqlConnection1;
+                   
+
+                   // SqlCommand cmd3 = new SqlCommand("", MyGlobal.sqlConnection1);
+
+                }
+
+
+                Debug.WriteLine(cmd3.ExecuteNonQuery());
+                //rd.Close();
+                Debug.WriteLine("Success");
+
+
+            }
+
+
+
 
 
 
