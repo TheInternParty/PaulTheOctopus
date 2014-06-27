@@ -15,31 +15,30 @@ namespace PaulTheOctopusGame.Account
         {
             RegisterHyperLink.NavigateUrl = "Register.aspx?ReturnUrl=" + HttpUtility.UrlEncode(Request.QueryString["ReturnUrl"]);
         }
-        protected void Open_Connection()
+       /* protected void Open_Connection()
         {
             sql_con = new SqlConnection("Data Source=ciqgur-atd133\\sqlexpress;Initial Catalog=ptogame;Integrated Security=SSPI");
             sql_con.Open();
-        }
+        }*/
         public void login(object sender, EventArgs e)
         {
             String username = ((TextBox) LoginUser.FindControl("userName")).Text;
             String password = ((TextBox)LoginUser.FindControl("Password")).Text;
             SqlDataReader rdr;
-            Open_Connection();
-            SqlCommand cmd = new SqlCommand("select name,password from User_tbl");
-            rdr=cmd.ExecuteReader();
             Session["username"] = username;
             Session["password"] = password;
-            if(rdr.HasRows)
-            while(rdr.Read())
+            //Open_Connection();
+            using (sql_con = new SqlConnection("Data Source=ciqgur-atd133\\sqlexpress;Initial Catalog=ptogame;Integrated Security=SSPI"))
             {
-                if(rdr.GetString(0)==username&&rdr.GetString(1)==password)
-                {
-                    Response.Redirect("");
-                    break;
-                }
+                SqlCommand cmd = new SqlCommand("select count(*) from User_tbl where name=\'"+username+"\' and password=\'"+password+"\'");
+                rdr = cmd.ExecuteReader();
+                if (rdr.HasRows && rdr.Read())
+                    Response.Redirect("Profile.aspx");
+                else
+                    Response.Redirect("Login.aspx");
             }
 
         }
+        
     }
 }
