@@ -31,8 +31,11 @@
             <div class="clear hideSkiplink">
                 <asp:Menu ID="NavigationMenu" runat="server" CssClass="menu" EnableViewState="false" IncludeStyleBlock="false" Orientation="Horizontal">
                     <Items>
-                        <asp:MenuItem NavigateUrl="~/Default.aspx" Text="Home"/>
-                        <asp:MenuItem NavigateUrl="~/About.aspx" Text="About"/>
+                        <asp:MenuItem NavigateUrl="~/Completed.aspx" Text="Completed" 
+                            Value="Completed"/>
+                        <asp:MenuItem NavigateUrl="~/Upcoming.aspx" Text="Upcoming" Value="Upcoming"/>
+                        <asp:MenuItem NavigateUrl="~/Leaderboard.aspx" Text="Leaderboard" 
+                            Value="Leaderboard"></asp:MenuItem>
                         <asp:MenuItem NavigateUrl="~/DataGatheringTesting.aspx" 
                             Text="DataGatheringTesting" Value="DataGatheringTesting"></asp:MenuItem>
                     </Items>
