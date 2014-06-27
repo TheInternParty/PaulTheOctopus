@@ -8,6 +8,8 @@ using System.Net;
 using System.IO;
 using System.Diagnostics;
 using Microsoft.Runtime;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 namespace PaulTheOctopusGame
 {
     public partial class WebForm1 : System.Web.UI.Page
@@ -33,13 +35,16 @@ namespace PaulTheOctopusGame
 
             var responseText = reader.ReadToEnd();
 
-            Debug.Write(responseText);
+            Debug.WriteLine(responseText);
 
             //dynamic res = JsonValue.Parse(responseText)
 
+            JObject res = JObject.Parse(responseText);
 
-
-
+            var some = JsonConvert.DeserializeObject<dynamic>(responseText);
+            var a = some.Teams;
+            
+            //Debug.Write(a);
             
            
 
