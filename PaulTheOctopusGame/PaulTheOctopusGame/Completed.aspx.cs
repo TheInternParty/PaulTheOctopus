@@ -30,7 +30,7 @@ namespace PaulTheOctopusGame
             dr["Prediction"] = "2-0";
             dr["Points"] = 0;
             dt.Rows.Add(dr);
-            GridView1.DataSource = dt;
+            GridView1.DataSource = getData();
             GridView1.DataBind();
         }
 
@@ -39,13 +39,24 @@ namespace PaulTheOctopusGame
             DataTable dt = new DataTable();
             MyGlobal.sqlConnection1.Open();
             SqlCommand cmd = new SqlCommand();
-            //cmd.CommandText="select matchid,team1,team2,team1score+'-'+team2score,
+            cmd.CommandText = "select matches_tbl.matchid, matches_tbl.team1, matches_tbl.team2, cast(matches_tbl.team1score as varchar)+'-'+cast(matches_tbl.team2score as varchar) as result, cast(user_prediction_tbl.team1score as varchar) +'-'+ cast(user_prediction_tbl.team2score as varchar) as prediction, user_prediction_tbl.points as points from matches_tbl,user_prediction_tbl where user_prediction_tbl.matchid=matches_tbl.matchid and matches_tbl.completed=1 and user_prediction_tbl.username='" + MyGlobal.username + "'";
+
+            cmd.Connection = MyGlobal.sqlConnection1;
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                DataRow dr = dt.NewRow();
+                dr["MatchId"] = Convert.ToInt32(reader[0]);
+                dr["Team 1"] = reader[1];
+                dr["Team 2"] = reader[2];
+                dr["Result"] = reader[3];
+                dr["Prediction"] = reader[4];
+                dr["Points"] = Convert.ToInt32(reader[5]);
+                dt.Rows.Add(dr);
+            }
+
+            MyGlobal.sqlConnection1.Close();
             return dt; 
-        }
-
-        protected void GridView1_SelectedIndexChanged1(object sender, EventArgs e)
-        {
-
         }
     }
 }
