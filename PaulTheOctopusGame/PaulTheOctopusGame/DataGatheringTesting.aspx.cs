@@ -10,6 +10,7 @@ using System.Diagnostics;
 using Microsoft.Runtime;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Data.SqlClient;
 namespace PaulTheOctopusGame
 {
     public partial class WebForm1 : System.Web.UI.Page
@@ -41,15 +42,31 @@ namespace PaulTheOctopusGame
 
             //JObject res = JObject.Parse(responseText);
 
+
+            MyGlobal.sqlConnection1.Open();
+
+            SqlCommand cmd2 = new SqlCommand("truncate table Teams_tbl ", MyGlobal.sqlConnection1);
+            cmd2.ExecuteNonQuery();
             var res = JsonConvert.DeserializeObject<dynamic>(responseText);
             foreach(var item in  res.teams.Children())
             {
-                string a = item.title;
-                Debug.WriteLine(a);       
-            }
-            
-            
+                string teamkey = item.key;
+                string teamname = item.title;
+                SqlCommand cmd = new SqlCommand("insert into Teams_tbl (teamkey, teamname) values(@teamkey,@teamname);", MyGlobal.sqlConnection1);
+                SqlParameter param = new SqlParameter();
+                param.ParameterName =  "@teamname";
+                param.Value = teamname;
+                SqlParameter param1 = new SqlParameter();
+                param1.ParameterName = "@teamkey";
+                param1.Value = teamkey;
+                cmd.Parameters.Add(param);
+                cmd.Parameters.Add(param1);
 
+                cmd.ExecuteNonQuery();
+            }
+
+
+            MyGlobal.sqlConnection1.Close();
 
             
             
