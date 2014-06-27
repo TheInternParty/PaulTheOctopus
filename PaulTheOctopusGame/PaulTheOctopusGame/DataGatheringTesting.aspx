@@ -4,4 +4,6 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <asp:Button ID="Button1" runat="server" onclick="Button1_Click" Text="GetTeams" 
     Width="85px" />
+    <asp:Button ID="Button2" runat="server" onclick="Button2_Click" 
+        Text="GetMatchesList" />
 </asp:Content>

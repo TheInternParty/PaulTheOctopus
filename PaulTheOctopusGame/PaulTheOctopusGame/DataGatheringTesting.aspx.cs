@@ -76,6 +76,47 @@ namespace PaulTheOctopusGame
             return;
         }
 
+        protected void Button2_Click(object sender, EventArgs e)
+        {
+            getOldMatchesList();
+        }
+
+        public void getOldMatchesList()
+        {
+            
+            MyGlobal.sqlConnection1.Open();
+            SqlCommand cmd2 = new SqlCommand("truncate table Matches_tbl ", MyGlobal.sqlConnection1);
+            cmd2.ExecuteNonQuery();
+            
+            for (int i = 1; i < 17; i++)
+            {
+                insertMatches(i);
+            }
+
+            
+
+
+
+        }
+
+        public void insertMatches(int roundNo)
+        {
+            string Url = "http://footballdb.herokuapp.com/api/v1//event/world.2014/round/"+roundNo.ToString();
+            WebRequest webRequest = WebRequest.Create(Url);
+            WebResponse response = webRequest.GetResponse();
+            Stream responseStream = response.GetResponseStream();
+            StreamReader reader = new StreamReader(responseStream);
+
+            var responseText = reader.ReadToEnd();
+
+            Debug.WriteLine(responseText);
+
+
+
+        
+        }
+
+
 
 
     }
