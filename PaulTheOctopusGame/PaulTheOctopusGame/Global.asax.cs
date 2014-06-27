@@ -50,5 +50,6 @@ namespace PaulTheOctopusGame
         public static string connstring = @"Data Source=CIQGUR-ATD133\sqlexpress;Initial Catalog=ptogame;Integrated Security=True;Pooling=False";
         public static System.Data.SqlClient.SqlConnection sqlConnection1 =
               new System.Data.SqlClient.SqlConnection(MyGlobal.connstring);
+        public static string username;
     }
 }

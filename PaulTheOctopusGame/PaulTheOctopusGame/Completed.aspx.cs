@@ -39,6 +39,7 @@ namespace PaulTheOctopusGame
             DataTable dt = new DataTable();
             MyGlobal.sqlConnection1.Open();
             SqlCommand cmd = new SqlCommand();
+            //cmd.CommandText="select matchid,team1,team2,team1score+'-'+team2score,
             return dt; 
         }
 
