@@ -298,14 +298,17 @@ namespace PaulTheOctopusGame
             {
 
                 DateTime sdate = Convert.ToDateTime(item.start_at);
-                DateTime edate = Convert.ToDateTime(item.end_date);
+                DateTime edate = Convert.ToDateTime(item.end_at);
+
                 //Debug.WriteLine(sdate);
+                //Debug.WriteLine(edate);
                 int a = DateTime.Compare(date, sdate);
                 int b = DateTime.Compare(date, edate);
+                
                 //Debug.WriteLine(a);
                 //Debug.WriteLine(b);
 
-                if ( a<=0 && b>=0)
+                if ( a>=0 && b<=0)
                 {
                     round = Convert.ToInt32(item.pos);
                     break;

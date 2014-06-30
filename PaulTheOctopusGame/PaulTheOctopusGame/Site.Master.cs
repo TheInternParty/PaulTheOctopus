@@ -29,7 +29,7 @@ namespace PaulTheOctopusGame
         protected void Page_Load(object sender, EventArgs e)
         {
             AutoRefresh AR = new AutoRefresh();
-            AR.StartTimer(myEvent, 10);
+            AR.StartTimer(myEvent, 30);
         }
 
         public void myEvent(object source, ElapsedEventArgs e)
