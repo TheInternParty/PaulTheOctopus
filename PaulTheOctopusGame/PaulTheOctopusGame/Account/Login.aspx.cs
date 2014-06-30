@@ -43,9 +43,11 @@ namespace PaulTheOctopusGame.Account
             Session["username"] = username;
             Session["password"] = password;
             //Open_Connection();
+           
             using (sql_con = new SqlConnection("Data Source=ciqgur-atd133\\sqlexpress;Initial Catalog=ptogame;Integrated Security=SSPI"))
             {
-                SqlCommand cmd = new SqlCommand("select count(*) from User_tbl where name=\'"+username+"\' and password=\'"+password+"\'");
+                sql_con.Open();
+                SqlCommand cmd = new SqlCommand("select count(*) from User_tbl where name=\'"+username+"\' and password=\'"+password+"\'", sql_con);
                 rdr = cmd.ExecuteReader();
                 if (rdr.HasRows && rdr.Read())
                     Response.Redirect("Profile.aspx");
