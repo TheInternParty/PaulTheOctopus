@@ -258,6 +258,13 @@ namespace PaulTheOctopusGame
             int day = Convert.ToInt32(TextBox3.Text);
 
             DateTime date = new DateTime(year, month, day);
+            RefreshData(date);
+
+        }
+
+        public void RefreshData(DateTime date)
+        {
+           
             GetMatches(date);
 
         }

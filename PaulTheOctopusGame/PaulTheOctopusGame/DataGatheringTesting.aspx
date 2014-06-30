@@ -7,7 +7,7 @@
     <asp:Button ID="Button2" runat="server" onclick="Button2_Click" 
         Text="GetMatchesList" />
     <asp:Button ID="Button3" runat="server" onclick="Button3_Click" 
-        Text="AddMatches" Width="89px" />
+        style="margin-top: 0px" Text="AddMatches" Width="89px" />
     <asp:TextBox ID="TextBox1" runat="server" Width="54px"></asp:TextBox>
     <asp:TextBox ID="TextBox2" runat="server" Width="37px"></asp:TextBox>
     <asp:TextBox ID="TextBox3" runat="server" style="margin-left: 4px" Width="36px"></asp:TextBox>

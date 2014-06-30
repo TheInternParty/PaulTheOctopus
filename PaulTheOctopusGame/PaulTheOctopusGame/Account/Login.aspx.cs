@@ -5,14 +5,29 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.SqlClient;
+using System.Timers;
+using System.Diagnostics;
 
 namespace PaulTheOctopusGame.Account
 {
+   
+
+   
+
+
+
     public partial class Login : System.Web.UI.Page
     {
+      
+      
+
+
         SqlConnection sql_con;
         protected void Page_Load(object sender, EventArgs e)
         {
+           
+
+
             RegisterHyperLink.NavigateUrl = "Register.aspx?ReturnUrl=" + HttpUtility.UrlEncode(Request.QueryString["ReturnUrl"]);
         }
        /* protected void Open_Connection()
