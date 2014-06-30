@@ -89,6 +89,7 @@ namespace PaulTheOctopusGame
             
             MyGlobal.sqlConnection1.Open();
             SqlCommand cmd2 = new SqlCommand("truncate table Matches_tbl ", MyGlobal.sqlConnection1);
+            MyGlobal.sqlConnection1.Close();
             cmd2.ExecuteNonQuery();
             
             for (int i = 1; i < 17; i++)
@@ -104,6 +105,7 @@ namespace PaulTheOctopusGame
 
         public void insertMatches(int roundNo)
         {
+            MyGlobal.sqlConnection1.Open();
             string Url = "http://footballdb.herokuapp.com/api/v1//event/world.2014/round/"+roundNo.ToString();
             WebRequest webRequest = WebRequest.Create(Url);
             WebResponse response = webRequest.GetResponse();
@@ -208,7 +210,7 @@ namespace PaulTheOctopusGame
                     }
                     else
                     {
-                        cmd3.CommandText = "UPDATE matches_tbl SET team1score=@team1score, team2score=@team2score WHERE matchdate=@date AND ((team1=@team1 AND team2=@team2) OR (team1=@team2 AND team2=@team1)) ";
+                        cmd3.CommandText = "UPDATE matches_tbl SET team1score=@team1score, team2score=@team2score, completed=1 WHERE matchdate=@date AND ((team1=@team1 AND team2=@team2) OR (team1=@team2 AND team2=@team1)) ";
                         cmd3.Connection = MyGlobal.sqlConnection1;
                         
                         param4.ParameterName = "@team1score";
@@ -242,7 +244,7 @@ namespace PaulTheOctopusGame
 
 
 
-
+            MyGlobal.sqlConnection1.Close();
 
 
         
@@ -263,6 +265,11 @@ namespace PaulTheOctopusGame
         public void GetMatches(DateTime date)
         {
             int round = GetRound(date);
+            insertMatches(round);
+
+            return;
+
+
         }
 
         public int GetRound(DateTime date)
@@ -285,7 +292,7 @@ namespace PaulTheOctopusGame
 
                 DateTime sdate = Convert.ToDateTime(item.start_at);
                 DateTime edate = Convert.ToDateTime(item.end_date);
-                Debug.WriteLine(sdate);
+                //Debug.WriteLine(sdate);
                 int a = DateTime.Compare(date, sdate);
                 int b = DateTime.Compare(date, edate);
                 //Debug.WriteLine(a);
