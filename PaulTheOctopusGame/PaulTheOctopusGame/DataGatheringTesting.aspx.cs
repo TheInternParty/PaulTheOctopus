@@ -96,8 +96,8 @@ namespace PaulTheOctopusGame
                 insertMatches(i);
             }
 
-            
 
+            return;
 
 
         }
@@ -122,7 +122,7 @@ namespace PaulTheOctopusGame
                 string team2 = item.team2_key;
                 DateTime date = Convert.ToDateTime(item.play_at);
 
-                SqlCommand cmd = new SqlCommand("select * from Matches_tbl where matchdate=@date AND ((team1=@team1 AND team2=@team2) OR (team1=@team2 AND team2=@team1)) ;", MyGlobal.sqlConnection1);
+                SqlCommand cmd = new SqlCommand("select completed from Matches_tbl where matchdate=@date AND ((team1=@team1 AND team2=@team2) OR (team1=@team2 AND team2=@team1)) ;", MyGlobal.sqlConnection1);
                 SqlParameter param = new SqlParameter();
                 param.ParameterName = "@team1";
                 param.Value = team1;
@@ -139,13 +139,15 @@ namespace PaulTheOctopusGame
 
                 SqlDataReader rd = cmd.ExecuteReader();
                 int count = 0;
+                bool comp=false;
                 while (rd.Read())
                 {
                     count = 1;
+                    comp = Convert.ToBoolean(rd[0]);
                     break;
 
                 }
-                if (count == 1)
+                if (count == 1  && comp)
                 {
                     rd.Close();
                     continue;
@@ -191,15 +193,33 @@ namespace PaulTheOctopusGame
 
                 if (completed)
                 {
-                    cmd3.CommandText="insert into Matches_tbl (team1, team2, matchdate, completed, team1score, team2score) values(@team1, @team2, @date, 1, @team1score, @team2score);";
-                    cmd3.Connection = MyGlobal.sqlConnection1;
-                    //SqlCommand cmd3 = new SqlCommand("insert into Matches_tbl (team1, team2, matchdate, completed, team1score, team2score) values(@team1, @team2, @date, @completed, @team1score, @team2score)", );
-                    param4.ParameterName = "@team1score";
-                    param4.Value = Convert.ToInt32(team1score);
-                    param5.ParameterName = "@team2score";
-                    param5.Value = Convert.ToInt32(team2score);
-                    cmd3.Parameters.Add(param4);
-                    cmd3.Parameters.Add(param5);
+                    if (count==0)
+                    {
+
+                        cmd3.CommandText = "insert into Matches_tbl (team1, team2, matchdate, completed, team1score, team2score) values(@team1, @team2, @date, 1, @team1score, @team2score);";
+                        cmd3.Connection = MyGlobal.sqlConnection1;
+                        
+                        param4.ParameterName = "@team1score";
+                        param4.Value = Convert.ToInt32(team1score);
+                        param5.ParameterName = "@team2score";
+                        param5.Value = Convert.ToInt32(team2score);
+                        cmd3.Parameters.Add(param4);
+                        cmd3.Parameters.Add(param5);
+                    }
+                    else
+                    {
+                        cmd3.CommandText = "UPDATE matches_tbl SET team1score=@team1score, team2score=@team2score WHERE matchdate=@date AND ((team1=@team1 AND team2=@team2) OR (team1=@team2 AND team2=@team1)) ";
+                        cmd3.Connection = MyGlobal.sqlConnection1;
+                        
+                        param4.ParameterName = "@team1score";
+                        param4.Value = Convert.ToInt32(team1score);
+                        param5.ParameterName = "@team2score";
+                        param5.Value = Convert.ToInt32(team2score);
+                        cmd3.Parameters.Add(param4);
+                        cmd3.Parameters.Add(param5);
+
+
+                    }
                 
                 }
                 else
@@ -226,6 +246,62 @@ namespace PaulTheOctopusGame
 
 
         
+        }
+
+      
+        protected void Button3_Click(object sender, EventArgs e)
+        {
+            int year = Convert.ToInt32(TextBox1.Text);
+            int month = Convert.ToInt32(TextBox2.Text);
+            int day = Convert.ToInt32(TextBox3.Text);
+
+            DateTime date = new DateTime(year, month, day);
+            GetMatches(date);
+
+        }
+
+        public void GetMatches(DateTime date)
+        {
+            int round = GetRound(date);
+        }
+
+        public int GetRound(DateTime date)
+        {
+            int round = 0;
+            Debug.WriteLine(date);
+            string Url = "http://footballdb.herokuapp.com/api/v1//event/world.2014/rounds/";
+            WebRequest webRequest = WebRequest.Create(Url);
+            WebResponse response = webRequest.GetResponse();
+            Stream responseStream = response.GetResponseStream();
+            StreamReader reader = new StreamReader(responseStream);
+
+            var responseText = reader.ReadToEnd();
+
+            Debug.WriteLine(responseText);
+            var res = JsonConvert.DeserializeObject<dynamic>(responseText);
+
+            foreach (var item in res.rounds.Children())
+            {
+
+                DateTime sdate = Convert.ToDateTime(item.start_at);
+                DateTime edate = Convert.ToDateTime(item.end_date);
+                Debug.WriteLine(sdate);
+                int a = DateTime.Compare(date, sdate);
+                int b = DateTime.Compare(date, edate);
+                //Debug.WriteLine(a);
+                //Debug.WriteLine(b);
+
+                if ( a<=0 && b>=0)
+                {
+                    round = Convert.ToInt32(item.pos);
+                    break;
+                }
+
+
+            }
+            Debug.WriteLine(round);
+
+            return round;
         }
 
 
