@@ -35,8 +35,6 @@
                         <asp:MenuItem NavigateUrl="~/Upcoming.aspx" Text="Upcoming" Value="Upcoming"/>
                         <asp:MenuItem NavigateUrl="~/Leaderboard.aspx" Text="Leaderboard" 
                             Value="Leaderboard"></asp:MenuItem>
-                        <asp:MenuItem NavigateUrl="~/DataGatheringTesting.aspx" 
-                            Text="DataGatheringTesting" Value="DataGatheringTesting"></asp:MenuItem>
                     </Items>
                 </asp:Menu>
             </div>
