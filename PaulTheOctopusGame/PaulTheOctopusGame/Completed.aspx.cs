@@ -43,7 +43,7 @@ namespace PaulTheOctopusGame
                 dr["Prediction"] = reader[4];
                 dr["Points"] = Convert.ToInt32(reader[5]);
                 dt.Rows.Add(dr);
-                Debug.WriteLine("Hello");
+                //Debug.WriteLine("Hello");
             }
 
             MyGlobal.sqlConnection1.Close();
